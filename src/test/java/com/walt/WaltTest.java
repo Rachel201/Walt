@@ -128,7 +128,7 @@ public class WaltTest {
     }
 
     @Test
-    public void createTowOrderNotAtTheSameTime(){
+    public void createTwoOrderNotAtTheSameTime(){
         Customer customer1 = customerRepository.findByName("Beethoven");
         Customer customer2 = customerRepository.findByName("Bach");
         Restaurant restaurant = restaurantRepository.findByName("chinese");
@@ -144,7 +144,7 @@ public class WaltTest {
         assertEquals(driver.getId(), delivery.getDriver().getId());
     }
     @Test
-    public void createTowOrders(){
+    public void createTwoOrders(){
         Customer customer1 = customerRepository.findByName("Beethoven");
         Customer customer2 = customerRepository.findByName("Bach");
         Restaurant restaurant = restaurantRepository.findByName("cafe");
@@ -158,6 +158,21 @@ public class WaltTest {
         assertNotEquals(driver.getId(), delivery.getDriver().getId());
     }
 
+    @Test
+    public void createTwoOrderOtherTime(){
+        Customer customer1 = customerRepository.findByName("Rachmaninoff");
+        Customer customer2 = customerRepository.findByName("Bach");
+        Restaurant restaurant = restaurantRepository.findByName("restaurant");
+
+        Date date1 = new Date();
+        Date date2 = new Date();
+        date2.setTime(date2.getTime() + TimeUnit.HOURS.toMillis(3));
+
+        Delivery delivery1 = waltService.createOrderAndAssignDriver(customer1, restaurant, date1);
+        Delivery delivery2 = waltService.createOrderAndAssignDriver(customer2, restaurant, date2 );
+
+        assertNotEquals(delivery1.getDeliveryTime(),delivery2.getDeliveryTime());
+    }
 
     @Test
     public void createOrderRestaurantNotInTown() {
@@ -194,7 +209,22 @@ public class WaltTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
+    public void differentCityOfCustomerAndRestaurant() {
+        Customer customer1 = customerRepository.findByName("Gilli"); //in bash
 
+        Restaurant restaurant = restaurantRepository.findByName("chinese"); //in tlv
+        Date date = new Date();
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            waltService.createOrderAndAssignDriver(customer1, restaurant,
+                    date);
+        });
+
+        String expectedMessage = "ERROR : The customer and restaurant are in the different cities";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 
     @Test
     public void testDriverRankReportByCity() {
@@ -237,7 +267,7 @@ public class WaltTest {
         Restaurant restaurant2 = restaurantRepository.findByName("meat");
 
         Date date = new Date();
-        date.setTime(date.getTime() + TimeUnit.HOURS.toMillis(2000));
+        date.setTime(date.getTime() + TimeUnit.HOURS.toMillis(10000));
 
 
         Delivery delivery1 = waltService.createOrderAndAssignDriver(customer1, restaurant1, date);
