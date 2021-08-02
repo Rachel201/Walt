@@ -131,7 +131,7 @@ public class WaltTest {
     public void createTowOrderNotAtTheSameTime(){
         Customer customer1 = customerRepository.findByName("Beethoven");
         Customer customer2 = customerRepository.findByName("Bach");
-        Restaurant restaurant = restaurantRepository.findByName("meat");
+        Restaurant restaurant = restaurantRepository.findByName("chinese");
         Date date = new Date();
         Driver driver = driverRepository.findByName("Robert");
 
@@ -168,7 +168,7 @@ public class WaltTest {
             waltService.createOrderAndAssignDriver(customer, restaurant, date);
         });
 
-        String expectedMessage = "Error: The restaurant should be in your city of located";
+        String expectedMessage = "Error:The restaurant should be in your city of located";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
