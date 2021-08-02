@@ -28,7 +28,7 @@ public class WaltServiceImpl implements WaltService {
     @Override
     public Delivery createOrderAndAssignDriver(Customer customer, Restaurant restaurant, Date deliveryTime) {
         if (customer == null || restaurant == null || deliveryTime == null) {
-            throw new RuntimeException("Error: One or more of the details  is null");
+            throw new RuntimeException("Error: One or more of the details is null");
         }
         if (!customer.getCity().getId().equals(restaurant.getCity().getId())) {
             throw new RuntimeException("Error:The restaurant should be in your city of located");

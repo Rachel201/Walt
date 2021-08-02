@@ -256,6 +256,37 @@ public class WaltTest {
         }
     }
 
+    @Test
+    public void invalidInput() {
+        Customer customer1 = customerRepository.findByName("Mozart");
+        Restaurant restaurant = restaurantRepository.findByName("meat");
+        Date date = new Date();
+
+        // Test to null customer
+        Exception exception1 = assertThrows(RuntimeException.class, () -> {
+            waltService.createOrderAndAssignDriver(null, restaurant,date);
+        });
+
+        String expectedMessage = "Error: One or more of the details is null";
+        String actualMessage1 = exception1.getMessage();
+        assertTrue(actualMessage1.contains(expectedMessage));
+
+        // Test for null restaurant
+        Exception exception2 = assertThrows(RuntimeException.class, () -> {
+            waltService.createOrderAndAssignDriver(customer1, null,date);
+        });
+        String actualMessage2 = exception2.getMessage();
+        assertTrue(actualMessage2.contains(expectedMessage));
+
+        // Test for null delivery
+        Exception exception3 = assertThrows(RuntimeException.class, () -> {
+            waltService.createOrderAndAssignDriver(customer1, restaurant,null);
+        });
+        String actualMessage3 = exception3.getMessage();
+        assertTrue(actualMessage3.contains(expectedMessage));
+    }
+
+
 
 }
 
