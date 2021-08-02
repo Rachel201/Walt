@@ -133,7 +133,7 @@ public class WaltTest {
         Customer customer2 = customerRepository.findByName("Bach");
         Restaurant restaurant = restaurantRepository.findByName("chinese");
         Date date = new Date();
-        Driver driver = driverRepository.findByName("Robert");
+        Driver driver = driverRepository.findByName("Mary");
 
         Delivery delivery = waltService.createOrderAndAssignDriver(customer1, restaurant,date);
         Date date2 = new Date();
